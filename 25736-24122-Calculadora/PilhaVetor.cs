@@ -41,7 +41,7 @@ public class PilhaVetor<T> : IStack<T>
     public T Desempilhar()
     {
         if (EstaVazia)
-            throw new Exception("Pilha esvaziou");
+            throw new Exception("pilha esvaziou");
 
         T dadoDoTopo = p[topo];
         p[topo] = default(T);
@@ -52,7 +52,7 @@ public class PilhaVetor<T> : IStack<T>
     public void Empilhar(T item)
     {
         if (Tamanho == tamanhoFisico)
-            throw new Exception("Pilha encheu");
+            throw new Exception("pilha encheu");
 
         topo++;
         p[topo] = item;
@@ -61,7 +61,7 @@ public class PilhaVetor<T> : IStack<T>
     public T OTopo()
     {
         if (EstaVazia)
-            throw new Exception("Pilha esvaziou");
+            throw new Exception("pilha esvaziou");
 
         return p[topo];
     }

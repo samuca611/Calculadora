@@ -18,7 +18,7 @@ public static class CalculadoraExpressao
     public static ResultadoExpressao Calcular(string texto)
     {
         if (string.IsNullOrWhiteSpace(texto))
-            throw new InvalidOperationException("Digite uma expressao para calcular.");
+            throw new InvalidOperationException("digite uma expressao para calcular.");
 
         var valores = new List<double>();
         string infixa = GerarInfixaComLetras(texto, valores);
@@ -54,12 +54,12 @@ public static class CalculadoraExpressao
                 string numeroTexto = LerNumero(texto, ref i);
 
                 if (valores.Count >= 26)
-                    throw new InvalidOperationException("Esta calculadora aceita ate 26 valores por expressao.");
+                    throw new InvalidOperationException("esta calculadora aceita ate 26 valores por expressao.");
 
                 if (!double.TryParse(numeroTexto.Replace(',', '.'), NumberStyles.Number,
                     CultureInfo.InvariantCulture, out double numero))
                 {
-                    throw new InvalidOperationException($"Numero invalido: {numeroTexto}");
+                    throw new InvalidOperationException($"numero invalido: {numeroTexto}");
                 }
 
                 valores.Add(numero);
@@ -74,7 +74,7 @@ public static class CalculadoraExpressao
                 continue;
             }
 
-            throw new InvalidOperationException("Caractere invalido encontrado: " + atual);
+            throw new InvalidOperationException("caractere invalido encontrado: " + atual);
         }
 
         return infixa.ToString();
@@ -134,7 +134,7 @@ public static class CalculadoraExpressao
             else if (atual == ',' || atual == '.')
             {
                 if (temSeparador)
-                    throw new InvalidOperationException("Numero com mais de um separador decimal.");
+                    throw new InvalidOperationException("numero com mais de um separador decimal.");
 
                 temSeparador = true;
                 numero.Append(atual);
@@ -152,7 +152,7 @@ public static class CalculadoraExpressao
             textoNumero == "+," || textoNumero == "-," ||
             textoNumero == "+." || textoNumero == "-.")
         {
-            throw new InvalidOperationException("Numero invalido: " + textoNumero);
+            throw new InvalidOperationException("número invalido: " + textoNumero);
         }
 
         return textoNumero;
@@ -190,7 +190,7 @@ public static class CalculadoraExpressao
                 }
 
                 if (!achouAbertura)
-                    throw new InvalidOperationException("Parenteses fechando sem abertura.");
+                    throw new InvalidOperationException("parenteses fechando sem abertura.");
             }
             else if (EhOperador(simbolo))
             {
@@ -209,7 +209,7 @@ public static class CalculadoraExpressao
             char operador = pilha.Desempilhar();
 
             if (operador == '(')
-                throw new InvalidOperationException("Parenteses abrindo sem fechamento.");
+                throw new InvalidOperationException("parenteses abrindo sem fechamento.");
 
             posfixa.Append(operador);
         }
@@ -272,7 +272,7 @@ public static class CalculadoraExpressao
             }
 
             if (pilha.Tamanho < 2)
-                throw new InvalidOperationException("Expressao incompleta.");
+                throw new InvalidOperationException("expressao incompleta.");
 
             double operando2 = pilha.Desempilhar();
             double operando1 = pilha.Desempilhar();
@@ -280,7 +280,7 @@ public static class CalculadoraExpressao
         }
 
         if (pilha.Tamanho != 1)
-            throw new InvalidOperationException("Expressao incompleta.");
+            throw new InvalidOperationException("expressao incompleta.");
 
         return pilha.Desempilhar();
     }
@@ -297,7 +297,7 @@ public static class CalculadoraExpressao
                 return operando1 * operando2;
             case '/':
                 if (operando2 == 0)
-                    throw new DivideByZeroException("Nao e permitido dividir por zero.");
+                    throw new DivideByZeroException("nao e permitido dividir por zero.");
 
                 return operando1 / operando2;
             case '^':
