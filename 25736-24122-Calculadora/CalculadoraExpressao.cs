@@ -161,7 +161,7 @@ public static class CalculadoraExpressao
     private static string ConverterInfixaParaPosfixa(string infixa)
     {
         var posfixa = new StringBuilder();
-        var pilha = new Stack<char>();
+        var pilha = new PilhaVetor<char>();
 
         foreach (char simbolo in infixa)
         {
@@ -171,15 +171,15 @@ public static class CalculadoraExpressao
             }
             else if (simbolo == '(')
             {
-                pilha.Push(simbolo);
+                pilha.Empilhar(simbolo);
             }
             else if (simbolo == ')')
             {
                 bool achouAbertura = false;
 
-                while (pilha.Count > 0)
+                while (!pilha.EstaVazia)
                 {
-                    char operador = pilha.Pop();
+                    char operador = pilha.Desempilhar();
                     if (operador == '(')
                     {
                         achouAbertura = true;
@@ -194,19 +194,19 @@ public static class CalculadoraExpressao
             }
             else if (EhOperador(simbolo))
             {
-                while (pilha.Count > 0 && pilha.Peek() != '(' &&
-                       TemPrecedencia(pilha.Peek(), simbolo))
+                while (!pilha.EstaVazia && pilha.OTopo() != '(' &&
+                       TemPrecedencia(pilha.OTopo(), simbolo))
                 {
-                    posfixa.Append(pilha.Pop());
+                    posfixa.Append(pilha.Desempilhar());
                 }
 
-                pilha.Push(simbolo);
+                pilha.Empilhar(simbolo);
             }
         }
 
-        while (pilha.Count > 0)
+        while (!pilha.EstaVazia)
         {
-            char operador = pilha.Pop();
+            char operador = pilha.Desempilhar();
 
             if (operador == '(')
                 throw new InvalidOperationException("Parenteses abrindo sem fechamento.");
@@ -261,28 +261,28 @@ public static class CalculadoraExpressao
 
     private static double CalcularPosfixa(string posfixa, List<double> valores)
     {
-        var pilha = new Stack<double>();
+        var pilha = new PilhaVetor<double>();
 
         foreach (char simbolo in posfixa)
         {
             if (char.IsLetter(simbolo))
             {
-                pilha.Push(valores[simbolo - 'A']);
+                pilha.Empilhar(valores[simbolo - 'A']);
                 continue;
             }
 
-            if (pilha.Count < 2)
+            if (pilha.Tamanho < 2)
                 throw new InvalidOperationException("Expressao incompleta.");
 
-            double operando2 = pilha.Pop();
-            double operando1 = pilha.Pop();
-            pilha.Push(ValorDaSubExpressao(operando1, simbolo, operando2));
+            double operando2 = pilha.Desempilhar();
+            double operando1 = pilha.Desempilhar();
+            pilha.Empilhar(ValorDaSubExpressao(operando1, simbolo, operando2));
         }
 
-        if (pilha.Count != 1)
+        if (pilha.Tamanho != 1)
             throw new InvalidOperationException("Expressao incompleta.");
 
-        return pilha.Pop();
+        return pilha.Desempilhar();
     }
 
     private static double ValorDaSubExpressao(double operando1, char operador, double operando2)
